@@ -53,29 +53,135 @@
 //         System.out.println("null");
 //     }
 // }
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+// class DoublyLinkedList{
+//     static class ListNode{
+//         int val;
+//         ListNode prev;
+//         ListNode next;
+//         public ListNode(int val){
+//             this.val = val;
+//             this.prev = null;
+//             this.next = null;
+//         }
+//     }
 
-class DoublyLinkedList{
-    static class ListNode{
+//     private ListNode head;
+//     private ListNode tail;
+
+//     public void addAtHead(int val){
+//         ListNode newNode = new ListNode(val);
+//         if(head == null){
+//             head = tail = newNode;
+//         }
+//         else{
+//             head.prev = newNode;
+//             newNode.next = head;
+//             head = newNode;
+//         }
+//     }
+
+//     public void addAtTail(int val){
+//         ListNode newNode = new ListNode(val);
+//         if(tail == null){
+//             head = tail = newNode;
+//         }
+//         else{
+//             tail.next = newNode;
+//             newNode.prev = tail;
+//             tail = newNode;
+//         }
+//     }
+
+//     public void deleteNode(int val){
+//         if(head == null) return;
+
+//         if(head.val == val){
+//             head = head.next;
+//             if(head != null){
+//                 head.prev = null;
+//             }
+//             else{
+//                 tail = null;
+//             }
+//             return;
+//         }
+
+//         ListNode temp = head;
+//         while(temp != null && temp.val != val){
+//             temp = temp.next;
+//         }
+
+//         if(temp != null){
+//             if(temp.next != null){
+//                 temp.next.prev = temp.prev;
+//             }
+//             else{
+//                 tail = temp.prev;
+//             }
+
+//             if(temp.prev != null){
+//                 temp.prev.next = temp.next;
+//             }
+//         }
+//     }
+
+//     public boolean findByNode(int val){
+//         ListNode temp = head;
+//         while(temp != null){
+//             if(temp.val == val){
+//                 return true;
+//             }
+//             temp = temp.next;
+//         }
+//         return false;
+//     }
+
+//     public void printLinkedList(){
+//         ListNode temp = head;
+//         while(temp != null){
+//             System.out.print(temp.val + "<->");
+//             temp = temp.next;
+//         }
+//         System.out.println();
+//     }
+
+//     public void reversePrintLinkedList(){
+//         ListNode temp = tail;
+//         while(temp != null){
+//             System.out.print(temp.val + "<->");
+//             temp = temp.prev;
+//         }
+//         System.out.println();
+//     }
+// }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------
+
+class CircularLinkedList{
+    class ListNode{
         int val;
-        ListNode prev;
         ListNode next;
         public ListNode(int val){
             this.val = val;
-            this.prev = null;
             this.next = null;
         }
     }
 
     private ListNode head;
-    private ListNode tail;
 
     public void addAtHead(int val){
         ListNode newNode = new ListNode(val);
         if(head == null){
-            head = tail = newNode;
+            head = newNode;
+            head.next = head;
         }
         else{
-            head.prev = newNode;
+            ListNode temp = head;
+            while(temp.next != head){
+                temp = temp.next;
+            }
+            temp.next = newNode;
             newNode.next = head;
             head = newNode;
         }
@@ -83,52 +189,54 @@ class DoublyLinkedList{
 
     public void addAtTail(int val){
         ListNode newNode = new ListNode(val);
-        if(tail == null){
-            head = tail = newNode;
+        if(head == null){
+            head = newNode;
+            head.next = head;
         }
         else{
-            tail.next = newNode;
-            newNode.prev = tail;
-            tail = newNode;
+            ListNode temp = head;
+            while (temp.next != head) {
+                temp = temp.next;
+            }
+
+            temp.next = newNode;
+            newNode.next = head;
         }
     }
 
+
     public void deleteNode(int val){
         if(head == null) return;
-
         if(head.val == val){
-            head = head.next;
-            if(head != null){
-                head.prev = null;
+            if(head.next == head){
+                head = null;
             }
             else{
-                tail = null;
+                ListNode temp = head;
+                while (temp.next != head){
+                    temp = temp.next;
+                }
+
+                temp.next = head.next;
+                head = head.next;
             }
             return;
         }
 
         ListNode temp = head;
-        while(temp != null && temp.val != val){
+        while(temp.next != head && temp.next.val != val){
             temp = temp.next;
         }
 
-        if(temp != null){
-            if(temp.next != null){
-                temp.next.prev = temp.prev;
-            }
-            else{
-                tail = temp.prev;
-            }
-
-            if(temp.prev != null){
-                temp.prev.next = temp.next;
-            }
+        if(temp.next.val == val){
+            temp.next = temp.next.next;
         }
     }
 
     public boolean findByNode(int val){
+        if(head == null) return false;
         ListNode temp = head;
-        while(temp != null){
+        while(temp.next != head){
             if(temp.val == val){
                 return true;
             }
@@ -138,22 +246,16 @@ class DoublyLinkedList{
     }
 
     public void printLinkedList(){
+        if(head == null) return;
         ListNode temp = head;
-        while(temp != null){
-            System.out.print(temp.val + "<->");
+
+        do {
+            System.out.print(temp.val + " -> ");
             temp = temp.next;
-        }
-        System.out.println();
+        } while (temp != head);
+        System.out.println("(head)");
     }
 
-    public void reversePrintLinkedList(){
-        ListNode temp = tail;
-        while(temp != null){
-            System.out.print(temp.val + "<->");
-            temp = temp.prev;
-        }
-        System.out.println();
-    }
 }
 
 public class LinkedList {
@@ -171,22 +273,36 @@ public class LinkedList {
         // sl.deleteNode(50);
         // sl.printLinkedList();
         // System.out.println();
-
-        System.out.println("Doubly LinkedList");
-        DoublyLinkedList dl = new DoublyLinkedList();
-        dl.addAtHead(10);
-        dl.addAtHead(20);
-        dl.addAtHead(30);
-        dl.printLinkedList();
-        dl.addAtTail(40);
-        dl.addAtTail(50);
-        dl.printLinkedList();
-        dl.deleteNode(20);
-        dl.deleteNode(50);
-        dl.printLinkedList();
-        dl.reversePrintLinkedList();
-        dl.findByNode(10);
-        dl.findByNode(20);
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // System.out.println("Doubly LinkedList");
+        // DoublyLinkedList dl = new DoublyLinkedList();
+        // dl.addAtHead(10);
+        // dl.addAtHead(20);
+        // dl.addAtHead(30);
+        // dl.printLinkedList();
+        // dl.addAtTail(40);
+        // dl.addAtTail(50);
+        // dl.printLinkedList();
+        // dl.deleteNode(20);
+        // dl.deleteNode(50);
+        // dl.printLinkedList();
+        // dl.reversePrintLinkedList();
+        // dl.findByNode(10);
+        // dl.findByNode(20);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        System.out.println("Circular LinkedList");
+        CircularLinkedList cl = new CircularLinkedList();
+        cl.addAtHead(10);
+        cl.addAtHead(20);
+        cl.addAtHead(30);
+        cl.printLinkedList();
+        cl.addAtTail(40);
+        cl.addAtTail(50);
+        cl.printLinkedList();
+        cl.deleteNode(20);
+        cl.deleteNode(50);
+        cl.printLinkedList();
+        System.out.println(cl.findByNode(10));
+        System.out.println(cl.findByNode(20));
     }
 }
