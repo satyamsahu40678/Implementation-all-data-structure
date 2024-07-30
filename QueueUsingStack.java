@@ -1,8 +1,8 @@
 import java.util.*;
 
 class Implement{
-    Stack<Integer> st1;
-    Stack<Integer> st2;
+    private Stack<Integer> st1;
+    private Stack<Integer> st2;
 
     public Implement(){
         st1 = new Stack<>();
